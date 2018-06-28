@@ -28,6 +28,11 @@ At a high level, the database is a separate application that you build separatel
 
 SQL databases are set up like an excel spreadsheet - the tables contain the information in rows (horizontal) and columns (verticals).  Values are the data found in the intersection row/column.  
 
+A database holds multiple tables, and these can be related to one another via primary and secondary keys.  
+
+Tables are column/row pairs that hold data.  Columns define the table and when you build the table you indicate in the columns the name of the data and the type of data you will store there.  Rows are added/removed/updated from the table later and are filled with data corresponding to the columns.
+
+
 6.  List three data types that can be used in a table.
 
 Integer, Float, Date
