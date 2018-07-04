@@ -1,0 +1,137 @@
+Exercises
+Answer the following questions and submit the responses.
+
+1. Write out a generic SELECT statement.
+
+SELECT column, column2... FROM tablename [ optional: WHERE conditional statement ]
+
+
+2.  Create a fun way to remember the order of operations in a SELECT statement, such as a mnemonic.
+
+Select 
+For
+Whatever you're looking for
+
+3. Given this dogs table, write queries to select the following pieces of data.  Intake teams typically guess the breed of shelter dogs, so the breed column may have multiple words (for example, "Labrador Collie mix").
+
+Display the name, gender, and age of all dogs that are part Labrador.
+
+SELECT name, gender, age FROM dogs WHERE breed LIKE '%labrador%';
+
+Display the ids of all dogs that are under 1 year old.
+
+SELECT id FROM dogs WHERE age < 1;
+
+Display the name and age of all dogs that are female and over 35lbs.
+
+SELECT name, age FROM dogs WHERE gender='F' AND weight > 35;
+
+Display all of the information about all dogs that are not Shepherd mixes.
+
+SELECT * FROM dogs WHERE breed NOT LIKE '%shepherd%';
+
+Display the id, age, weight, and breed of all dogs that are either over 60lbs or Great Danes.
+
+SELECT id, age, weight, breed FROM dogs WHERE weight > 60 OR breed = 'great dane';
+
+4. Given this cats table, what records are returned from these queries?
+
+SELECT name, adoption_date FROM cats;
+
+   name   | adoption_date 
+----------+---------------
+ Mushi    | 2016-03-22
+ Seashell | 
+ Azul     | 2016-04-17
+ Victoire | 2016-09-01
+ Nala     | 
+(5 rows)
+
+
+SELECT name, age FROM cats;
+   name   | age 
+----------+-----
+ Mushi    |   1
+ Seashell |   7
+ Azul     |   3
+ Victoire |   7
+ Nala     |   1
+(5 rows)
+
+
+5. From the cats table, write queries to select the following pieces of data.
+
+Display all the information about all of the available cats.
+
+SELECT * FROM cats;
+
+Choose one cat of each age to show to potential adopters.
+
+SELECT DISTINCT ON (age) id, name, gender, age FROM cats;
+
+
+Find all of the names of the cats, so you don’t choose duplicate names for new cats.
+
+SELECT DISTINCT name FROM cats;
+   name   
+----------
+ Seashell
+ Mushi
+ Nala
+ Azul
+ Victoire
+(5 rows)
+
+
+6.  List each comparison operator and explain when you would use it. Include a real world example for each.
+
+= test for equivalency; ex/check a password string to see if it matches
+> greater than, to compare values; ex/sort through accounting and return only bills over a certain amount
+< less than, to compare values; ex/to check if your bank balances are under a certain point
+>= greater than or equal to, test for equivalency that includes value
+<= less than or equal to, test for equivalency that includes value
+!= or <> not equal test for equivalency; ex/ if you have a database and want to eliminate all records from a certain state
+IS DISTINCT FROM, can be used in place of <> if one of the compared values could be null
+BETWEEN returns a range including the endpoints, ex/searching for test scores within a certain range BETWEEN 3.2 and 4.0 would include scores of 3.2 and 4.0
+LIKE uses reg expressions to match parts of strings, ex/if you want to find string that contain the word foo you can search for LIKE '%foo%'
+IS TRUE / IS FALSE can be used to test an expression and will not make an error if a value is null; always returns true or false.  You could return all the cats where gender='F' IS TRUE
+IS NULL checks if a value has been entered or is null, you could check it to find cats that have not been adopted if the default value of the column had been set to null and then replaced with a date only when the cat is actually adopted
+AND, same as && in other languages, means both statements must be true, ex/ search for cats where age>1 AND gender='F'
+OR, same as || in other languages, means one of the statements is true, but not necessarily both, for example search for cats where age <2 || age > 3 will not return cats aged 2 or 3
+NOT, just requires the statment to be false in order to return the result, ex/search for all cats where gender NOT 'F' (which looks like SELECT * FROM cats WHERE NOT gender='F';) I'm not sure the best way to use the negation 
+
+
+If you can’t list these from memory, do these flashcards until you can!
+
+From the cats table, what data is returned from these queries?
+SELECT name FROM cats WHERE gender = ‘F’;
+
+This will return all names of female cats, no other columns:
+   name   
+----------
+ Seashell
+ Nala
+(2 rows)
+
+SELECT name FROM cats WHERE age <> 3;
+
+Will return the names of all the cats whose age is not 3, expect to get 4 names:
+
+   name   
+----------
+ Mushi
+ Seashell
+ Victoire
+ Nala
+(4 rows)
+
+SELECT ID FROM cats WHERE name != ‘Mushi’ AND gender = ‘M’;
+
+Will return the id of all male cats who are not names Mushi, expect 2 ids:
+
+ id 
+----
+  3
+  4
+(2 rows)
+
