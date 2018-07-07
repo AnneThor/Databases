@@ -1,0 +1,218 @@
+Exercises
+Submit your answers to the following questions.
+
+NOTE: Real-world examples must be your own and not based on the text or previous assignments.
+
+1.  How do you find related data held in two separate data tables?
+
+You use a join statement to use a common column to match rows between the data in both tables.
+
+2.  Explain, in your own words, the difference between an INNER JOIN, LEFT OUTER JOIN, and RIGHT OUTER JOIN. Give a real-world example for each.
+
+Inner joins only return rows where there is a match in the second table.  Let's say you have a table full of customers with a customer id and a second table of purchases.  If you want to return a data set matching customers and their purchases an inner join would omit customers that haven't made any purchases.
+
+Left outer joins return all the rows from the first table and just leave null values where they don't have a match.  In the above example, all customer information would be returned, and null values would show for those who had not made any purchases.
+
+Right outer join would return all the rows from the second table and just leave null values where there is no match.  So in the above example, all purchases would be returned and null values would appear if there was no corresponding customer information.
+
+3.  Define primary key and foreign key. Give a real-world example for each.
+
+Primary keys are unique index values placed on the data in a table.  They are unique within the table, to each row has a distinct primary key value.  These primary keys values may appear as a foreign id in a separate table.  They are not necessarily unique in the context of a foreign key.
+
+For example, each customer would have a unique customer id in the customer table as the primary key.  In the purchases table, customer_id would be a foreign key and it could appear in multiple rows if a customer had made more than one purchase.
+
+4.  Define aliasing.
+
+You can use aliasing to simplify your sql searches.  If you are performing joins, you may want to refer to a table by a shortened version of it's full name so that you are making a query that is easier to read understand.  You can also use this to rename the columns in the result set that you return (if for some reason that makes the data easier to understand).
+
+In the above example you may want to say something like
+
+SELECT c.name, p.total FROM customers as c
+JOIN purchases as p
+ON c.id = p.customer_id;
+
+5.  Change this query so that you are using aliasing:
+
+SELECT professor.name, compensation.salary,
+compensation.vacation_days FROM professor JOIN
+compensation ON professor.id =
+compensation.professor_id;
+
+SELECT p.name, c.salary, c.vacation_days
+FROM professor as p
+JOIN compensation as c
+ON p.id = c.professor_id;
+
+           name           | salary | vacation_days 
+--------------------------+--------+---------------
+ Albus Dumbledore         |  64000 |             2
+ Severus Snape            |  35000 |             8
+ Dolores Umbridge         |  56750 |            10
+ Bathsheda Babbling       |  42950 |             8
+ Rubeus Hagrid            |  30000 |             4
+ Wilhelmina Grubbly-Plank | 102750 |            22
+(6 rows)
+
+6.  Why would you use a NATURAL JOIN? Give a real-world example.
+
+You would use this when you are trying to return results on two tables that have multiple shared column names to simplify the query.  For example, if you are comparing shipping and billing addresses you will have many of the same column names (address, state, zip, etc.) so a natural join will be more succinct than writing s.address = b.address AND s.state = b.state AND...
+
+7.  Using this Employee schema and data, write queries to find the following information:
+List all employees and all shifts.
+
+select e.id, e.name, s.date, s.start_time, s.end_time
+from employees as e
+join scheduled_shifts as ss on e.id = ss.employee_id
+join shifts as s on ss.shift_id = s.id;
+
+ id |       name       |    date    | start_time | end_time 
+----+------------------+------------+------------+----------
+  1 | Hermione Granger | 1998-03-09 | 08:00:00   | 16:00:00
+  1 | Hermione Granger | 1998-03-10 | 08:00:00   | 16:00:00
+  1 | Hermione Granger | 1998-03-11 | 08:00:00   | 16:00:00
+  1 | Hermione Granger | 1998-03-12 | 08:00:00   | 16:00:00
+  1 | Hermione Granger | 1998-03-13 | 08:00:00   | 16:00:00
+  2 | Ronald Weasley   | 1998-03-10 | 12:00:00   | 16:00:00
+  2 | Ronald Weasley   | 1998-03-12 | 12:00:00   | 16:00:00
+  3 | Luna Lovegood    | 1998-03-09 | 12:00:00   | 16:00:00
+  3 | Luna Lovegood    | 1998-03-11 | 12:00:00   | 16:00:00
+  3 | Luna Lovegood    | 1998-03-13 | 12:00:00   | 16:00:00
+  4 | Draco Malfoy     | 1998-03-11 | 16:00:00   | 20:00:00
+  4 | Draco Malfoy     | 1998-03-12 | 16:00:00   | 20:00:00
+  4 | Draco Malfoy     | 1998-03-13 | 16:00:00   | 20:00:00
+  5 | Padma Patil      | 1998-03-09 | 12:00:00   | 20:00:00
+  5 | Padma Patil      | 1998-03-10 | 12:00:00   | 20:00:00
+  5 | Padma Patil      | 1998-03-11 | 12:00:00   | 20:00:00
+  5 | Padma Patil      | 1998-03-09 | 08:00:00   | 12:00:00
+  5 | Padma Patil      | 1998-03-10 | 08:00:00   | 12:00:00
+  5 | Padma Patil      | 1998-03-11 | 08:00:00   | 12:00:00
+  8 | Cho Chang        | 1998-03-12 | 12:00:00   | 20:00:00
+  8 | Cho Chang        | 1998-03-13 | 12:00:00   | 20:00:00
+  9 | Dean Thomas      | 1998-03-09 | 16:00:00   | 20:00:00
+  9 | Dean Thomas      | 1998-03-10 | 16:00:00   | 20:00:00
+(23 rows)
+
+8.  Using this Adoption schema and data, please write queries to retrieve the following information and include the results:
+
+Create a list of all volunteers. If the volunteer is fostering a dog, include each dog as well.
+
+select CONCAT(v.first_name, ' ',v.last_name) AS VolunteerName, d.name AS FosterDogName  from volunteers as v
+left outer join dogs as d
+on v.foster_dog_id = d.id;
+
+  volunteername   | fosterdogname 
+------------------+---------------
+ Rubeus Hagrid    | Munchkin
+ Marjorie Dursley | Marmaduke
+ Sirius Black     | 
+ Remus Lupin      | 
+ Albus Dumbledore | 
+(5 rows)
+
+9.  The cat's name, adopter's name, and adopted date for each cat adopted within the past month to be displayed as part of the "Happy Tail" social media promotion which posts recent successful adoptions.
+
+
+select c.name as catname, concat(a.first_name, ' ', a.last_name) as adoptername, ca.date
+from cats as c
+join cat_adoptions as ca on c.id = ca.cat_id
+join adopters as a on ca.adopter_id = a.id
+where ca.date between '2018-06-04' and '2018-07-04';
+
+ catname  |  adoptername  |    date    
+----------+---------------+------------
+ Mushi    | Arabella Figg | 2018-06-14
+ Victoire | Argus Filch   | 2018-06-19
+(2 rows)
+
+
+10.  Create a list of adopters who have not yet chosen a dog to adopt.
+
+select concat(a.first_name,' ',a.last_name) as adoptername
+from adopters as a
+join dog_adoptions as da
+on a.id != da.adopter_id;
+
+   adoptername    
+------------------
+ Hermione Granger
+ Arabella Figg
+(2 rows)
+
+11. Lists of all cats and all dogs who have not been adopted.
+
+select c.name from cats as c                                                                                     WHERE c.id NOT IN (select cat_id from cat_adoptions);
+   name   
+----------
+ Seashell
+ Nala
+(2 rows)
+
+select name from dogs                                                                                            where dogs.id NOT IN (select dog_id from dog_adoptions);                                                                       name    
+-----------
+ Boujee
+ Munchkin
+ Marley
+ Lassie
+ Marmaduke
+(5 rows)
+
+**But how do I join them into one list.. I can't figure that out.
+
+12.  The name of the person who adopted Rosco.
+
+select concat(a.first_name, ' ', last_name) as name from adopters as a
+join dog_adoptions as da on a.id = da.adopter_id
+join dogs as d on da.dog_id = d.id;
+
+    name     
+-------------
+ Argus Filch
+(1 row)
+
+
+Using this Library schema and data, write queries applying the following scenarios and include the results:
+
+13.  To determine if the library should buy more copies of a given book, please provide the names and position, in order, of all of the patrons with a hold (request for a book with all copies checked out) on "Advanced Potion-Making".
+
+select p.name, h.rank as holdposition from patrons as p                                                          join holds as h on p.id = h.patron_id                                                                                       join books as b on h.isbn = b.isbn AND b.title = 'Advanced Potion-Making'                                                   order by holdposition;
+
+      name      | holdposition 
+----------------+--------------
+ Terry Boot     |            1
+ Cedric Diggory |            2
+(2 rows)
+
+
+14. List all of the library patrons. If they have one or more books checked out, list the books with the patrons.
+
+select p.name as patron, b.title as checkedout from patrons as p                                                 left join transactions as t on t.patron_id = p.id                                                                           join books as b on t.isbn = b.isbn order by p.id;
+      patron      |               checkedout                
+------------------+-----------------------------------------
+ Hermione Granger | Fantastic Beasts and Where to Find Them
+ Hermione Granger | Hogwarts: A History
+ Terry Boot       | Advanced Potion-Making
+ Terry Boot       | Fantastic Beasts and Where to Find Them
+ Padma Patil      | Fantastic Beasts and Where to Find Them
+ Cho Chang        | Advanced Potion-Making
+ Cedric Diggory   | Fantastic Beasts and Where to Find Them
+(7 rows)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
